@@ -1,0 +1,45 @@
+version: '2'
+services:
+  local_web:
+    build:
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    image: server:latest
+    ports: 
+      - 8080:8080
+    depends_on:
+      local_db:
+        condition: service_healthy
+    networks:
+      - spring-network
+
+  local_db:
+        image: postgres:12.2-alpine
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgresdata:/var/lib/postgresql/data
+        env_file:
+            - .env
+        healthcheck:
+            test:
+                [
+                    "CMD-SHELL",
+                    "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -h $${POSTGRES_HOST} -p $${POSTGRES_PORT}"
+                ]
+
+            interval: 3s
+            timeout: 5s
+            retries: 5
+        networks:
+          - spring-network
+
+networks:
+  spring-network:
+    driver: bridge
+
+volumes:
+  postgresdata:
+    driver: local
+
