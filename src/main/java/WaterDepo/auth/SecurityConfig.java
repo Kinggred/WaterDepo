@@ -45,10 +45,11 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf().disable().authorizeHttpRequests().requestMatchers("/rest/auth/**").permitAll().anyRequest().authenticated()
+    http.csrf().disable().authorizeRequests().requestMatchers("/rest/auth/**").permitAll().anyRequest().authenticated()
         .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
+    System.out.println("Am i here???");
     return http.build();
   }
 

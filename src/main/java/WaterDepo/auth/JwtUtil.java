@@ -18,7 +18,7 @@ public class JwtUtil {
 
     // TODO: Not safe, gotta love GitHub mails bout leaked secrets
     private final String secret_key = "whyIsThisSecretKeyNotWorkingThatsBeyoundMyComprehension";
-    private long accessTokenValididy = 60 * 60 * 100;
+    private long accessTokenValididy = 60 * 60 * 1000;
 
     private final JwtParserBuilder jwtParser;
 
@@ -41,7 +41,7 @@ public class JwtUtil {
     }
 
     private Claims parseJwtClaims(String token) {
-        return jwtParser.build().parseUnsecuredClaims(token).getPayload();
+        return jwtParser.build().parseSignedClaims(token).getBody();
     }
 
     public Claims resolveClaims(HttpServletRequest req) {
@@ -53,11 +53,9 @@ public class JwtUtil {
             return null;
         } catch (ExpiredJwtException ex) {
             req.setAttribute("expired", ex.getMessage());
-            System.out.println("THIS _-_-_-_-_-_-_-_-_-_-");
             throw ex;
         } catch (Exception ex) {
             req.setAttribute("invalid", ex.getMessage());
-            System.out.println("THIS2 _-_-_-_-_-_-_-_-_-_-");
             throw ex;
         }
     }
