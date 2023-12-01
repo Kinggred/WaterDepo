@@ -18,7 +18,8 @@ public class KayakModel {
 
     @Column(unique = true, nullable = false)
     private String name;
-
+    
+    // JSON Field
     @Convert(converter = HashMapConverter.class)
     private Map<String, Object> info;
 

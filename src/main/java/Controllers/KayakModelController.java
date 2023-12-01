@@ -40,7 +40,6 @@ public class KayakModelController {
         }
     }
 
-
     @ResponseBody
     @GetMapping
     public ResponseEntity getAvailableKayakModels() {

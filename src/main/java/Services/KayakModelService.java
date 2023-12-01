@@ -12,7 +12,8 @@ import Repositories.KayakModelRepository;
 @Service
 public class KayakModelService {
 
-    @Autowired private KayakModelRepository kayakModelRepository;
+    @Autowired
+    private KayakModelRepository kayakModelRepository;
 
     public KayakModel createKayakModel(KayakModel model) {
         return kayakModelRepository.save(model);
@@ -25,4 +26,4 @@ public class KayakModelService {
     public List<KayakModel> getAllKayakModels() {
         return kayakModelRepository.findAll();
     }
-}
+} 
