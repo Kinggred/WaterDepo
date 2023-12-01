@@ -1,5 +1,6 @@
 package Services;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,9 @@ public class KayakModelService {
 
     public KayakModel getKayakModelById(UUID id) {
         return kayakModelRepository.getReferenceById(id);
+    }
+
+    public List<KayakModel> getAllKayakModels() {
+        return kayakModelRepository.findAll();
     }
 }
