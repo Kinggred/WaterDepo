@@ -2,6 +2,7 @@ package Models.Kayak;
 
 import jakarta.persistence.*;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -11,6 +12,9 @@ public class KayakModel {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
+
+  @OneToMany(mappedBy = "type")
+  private Set<Kayak> kayaks;
 
   @Column(unique = true)
   private String name;

@@ -1,7 +1,6 @@
 package Models.Kayak;
 
 import jakarta.persistence.*;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -12,8 +11,6 @@ public class Kayak {
   private UUID id;
 
   @ManyToOne
-  @JoinColumn(name = "id")
-  private UUID typeId;
-
-  private Set<KayakModel> type;
+  @JoinColumn(name = "kayaks", nullable = false)
+  private KayakModel type;
 }
