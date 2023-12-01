@@ -7,6 +7,7 @@ import Models.User.User;
 import Services.UserService;
 import WaterDepo.auth.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,10 +36,16 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/register") 
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+  @PostMapping("/register")
+  public ResponseEntity createUser(@RequestBody User user) {
+    try {
+    User dbUser = userService.createUser(user);
+    return ResponseEntity.ok(dbUser);
+    } catch (DataIntegrityViolationException e) {
+        ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, "You mongol");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+  }
 
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -55,6 +62,8 @@ public class AuthController {
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, "Invalid username or password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception e) {
+            // TODO: I'm pretty sure this is unsafe AF
+            // TODO: Remove e.getMessage() Insert something generic
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
