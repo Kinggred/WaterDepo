@@ -1,7 +1,6 @@
 package Models.Kayak;
 
 import jakarta.persistence.*;
-
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,5 +13,10 @@ public class Kayak {
   @JoinColumn(name = "kayaks", nullable = false)
   private KayakModel type;
 
+
   @OneToMany(mappedBy = "kayak") private Set<Rental> rents;
+
+  public Set<Rental> getRents() { return rents; }
+
+  public KayakModel getType() { return type; }
 }

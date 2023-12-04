@@ -14,7 +14,15 @@ import java.util.UUID;
 public class Rental {
   @Id @GeneratedValue(strategy = GenerationType.UUID) private UUID id;
 
-  @ManyToOne @JoinColumn(name = "rents") private Kayak kayak;
 
-  @ManyToOne @JoinColumn(name = "rentals") private Order order;
+@ManyToOne @JoinColumn(name = "rents") private Kayak kayak;
+
+
+@ManyToOne @JoinColumn(name = "rentals") private Order order;
+public Kayak getKayak() {
+    return kayak;
+}
+public Order getOrder() {
+    return order;
+}
 }

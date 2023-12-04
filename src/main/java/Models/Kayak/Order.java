@@ -20,5 +20,17 @@ public class Order {
 
   @ManyToOne @JoinColumn(name = "orders", nullable = false) private User user;
 
-  @OneToMany(mappedBy = "order") private Set<Rental> rentals;
+
+public void setUser(User user) {
+	this.user = user;
+}
+
+@OneToMany(mappedBy = "order") private Set<Rental> rentals;
+
+public User getUser() {
+    return user;
+}
+public Set<Rental> getRentals() {
+	return rentals;
+}
 }
