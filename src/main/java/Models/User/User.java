@@ -3,6 +3,8 @@ package Models.User;
 import jakarta.persistence.*;
 import java.util.UUID;
 
+import Models.Kayak.Order;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -16,6 +18,10 @@ public class User {
   private String email;
 
   private String password;
+
+  @OneToMany(mappedBy = "user")
+  private Order order;
+
 
   public UUID getId() {
     return id;

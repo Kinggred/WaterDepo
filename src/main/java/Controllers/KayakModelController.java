@@ -22,38 +22,40 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/administrative/models")
 public class KayakModelController {
 
-    @Autowired
+  @Autowired
 
-    KayakModelService kayakModelService;
+  KayakModelService kayakModelService;
 
-    @PostMapping
-    public ResponseEntity createKayakModel(@RequestBody KayakModel kayakModel) {
-        try {
-            KayakModel kayakModelInDb = kayakModelService.createKayakModel(kayakModel);
-            HashMap<String, String> response = new HashMap<>();
-            response.put("info", "Succesfully created a new kayak type");
-            response.put("name", kayakModelInDb.getName());
-            return ResponseEntity.ok(response);
-        } catch (DataIntegrityViolationException e) {
-            ErrorRes errorRes = new ErrorRes(HttpStatus.BAD_REQUEST, "I mean, you tried");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorRes);
-        }
+  @PostMapping
+  public ResponseEntity createKayakModel(@RequestBody KayakModel kayakModel) {
+    try {
+      KayakModel kayakModelInDb =
+          kayakModelService.createKayakModel(kayakModel);
+      HashMap<String, String> response = new HashMap<>();
+      response.put("info", "Succesfully created a new kayak type");
+      response.put("name", kayakModelInDb.getName());
+      return ResponseEntity.ok(response);
+    } catch (DataIntegrityViolationException e) {
+      ErrorRes errorRes =
+          new ErrorRes(HttpStatus.BAD_REQUEST, "I mean, you tried");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorRes);
     }
+  }
 
-    @ResponseBody
-    @GetMapping
-    public List<KayakModel> getAvailableKayakModels() {
-        List<KayakModel> models = kayakModelService.getAllKayakModels();
-        return models;
-    }
+  @ResponseBody
+  @GetMapping
+  public List<KayakModel> getAvailableKayakModels() {
+    List<KayakModel> models = kayakModelService.getAllKayakModels();
+    return models;
+  }
 
-    @ResponseBody
-    @GetMapping("/{id}")
-    public KayakModel getSingleKayakModel(@PathVariable UUID id) {
-        try {
-            return kayakModelService.getKayakModelById(id);
-        } catch (Exception e) {
-            return null;
-        }
+  @ResponseBody
+  @GetMapping("/{id}")
+  public KayakModel getSingleKayakModel(@PathVariable UUID id) {
+    try {
+      return kayakModelService.getKayakModelById(id);
+    } catch (Exception e) {
+      return null;
     }
+  }
 }
