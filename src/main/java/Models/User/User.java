@@ -1,6 +1,8 @@
 package Models.User;
 
 import jakarta.persistence.*;
+
+import java.util.Set;
 import java.util.UUID;
 
 import Models.Kayak.Order;
@@ -20,7 +22,7 @@ public class User {
   private String password;
 
   @OneToMany(mappedBy = "user")
-  private Order order;
+  private Set<Order> orders;
 
 
   public UUID getId() {

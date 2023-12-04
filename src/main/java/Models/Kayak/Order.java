@@ -1,5 +1,6 @@
 package Models.Kayak;
 
+import java.util.Set;
 import java.util.UUID;
 
 import Models.User.User;
@@ -19,5 +20,5 @@ public class Order {
 
   @ManyToOne @JoinColumn(name = "orders", nullable = false) private User user;
 
-  @OneToMany(mappedBy = "orders") private Rental rents;
+  @OneToMany(mappedBy = "order") private Set<Rental> rentals;
 }

@@ -16,5 +16,5 @@ public class Rental {
 
   @ManyToOne @JoinColumn(name = "rents") private Kayak kayak;
 
-  @ManyToOne @JoinColumn(name = "rents") private Order order;
+  @ManyToOne @JoinColumn(name = "rentals") private Order order;
 }
