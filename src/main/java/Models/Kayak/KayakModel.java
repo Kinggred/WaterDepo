@@ -6,9 +6,14 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityReference(alwaysAsId = true)
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name = "kayak_type")
@@ -18,7 +23,6 @@ public class KayakModel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @JsonBackReference
     @OneToMany(mappedBy = "type")
     private Set<Kayak> kayaks;
 

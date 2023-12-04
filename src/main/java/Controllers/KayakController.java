@@ -4,15 +4,19 @@ import Models.Kayak.Kayak;
 import Models.Kayak.KayakModel;
 import Services.KayakModelService;
 import Services.KayakService;
+import jakarta.websocket.server.PathParam;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -26,7 +30,7 @@ public class KayakController {
   public ResponseEntity CreateKayak(@RequestBody Kayak kayak) {
     try {
       KayakModel kayakModel =
-          kayakModelService.getKayakModelById(kayak.getType().getId());
+          kayakModelService.getKayakModelById(kayak.getType());
       Kayak kayakInDb = new Kayak();
       kayakInDb.setType(kayakModel);
       kayakService.createKayak(kayakInDb);
@@ -39,12 +43,27 @@ public class KayakController {
   }
 
   @GetMapping
-  public ResponseEntity getKayaks() {
+  public ResponseEntity getKayaks(@RequestParam(required = false) UUID model) {
     try {
-      List<Kayak> kayaks = kayakService.getAllKayaks();
+      List<Kayak> kayaks;
+      if (model == null) {
+        kayaks = kayakService.getAllKayaks();
+      } else {
+        kayaks = kayakService.GetKayaksByModelId(model);
+      }
       return ResponseEntity.ok(kayaks);
     } catch (Exception e) {
       return ResponseEntity.internalServerError().build();
+    }
+  }
+
+  @ResponseBody
+  @GetMapping("/{id}")
+  public Kayak getKayakById(@PathVariable UUID id) {
+    try {
+      return kayakService.getKayakById(id);
+    } catch (Exception e) {
+      return null;
     }
   }
 }
