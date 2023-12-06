@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "Controllers")
+@ComponentScan(basePackages = {"Controllers", "Models"})
 public class Config {
 
     
