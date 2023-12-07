@@ -5,7 +5,4 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"Controllers", "Models"})
-public class Config {
-
-    
-}
+public class Config {}
