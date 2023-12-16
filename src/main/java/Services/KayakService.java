@@ -32,7 +32,7 @@ public class KayakService {
          return kayakRepository.getReferenceById(id);
      }
 
-     public List<Kayak> GetKayaksByModelId(UUID id) {
+     public List<Kayak> getKayaksByModelId(UUID id) {
          Kayak kayak = new Kayak();
          KayakModel kayakModel = kayakModelRepository.getReferenceById(id);
          kayak.setType(kayakModel);

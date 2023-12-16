@@ -1,7 +1,4 @@
-package Models.Kayak;
-
-import java.util.Set;
-import java.util.UUID;
+package Models.Order;
 
 import Models.User.User;
 import jakarta.persistence.Entity;
@@ -12,6 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
@@ -20,17 +19,23 @@ public class Order {
 
   @ManyToOne @JoinColumn(name = "orders", nullable = false) private User user;
 
+  @OneToMany(mappedBy = "order") private Set<Rental> rentals;
 
-public void setUser(User user) {
-	this.user = user;
-}
+  public UUID getId() {
+      return id;
+  }
 
-@OneToMany(mappedBy = "order") private Set<Rental> rentals;
+  public void setId(UUID id) {
+      this.id = id;
+  }
 
-public User getUser() {
-    return user;
-}
-public Set<Rental> getRentals() {
-	return rentals;
-}
+  public void setUser(User user) { this.user = user; }
+
+  public User getUser() { return user; }
+
+  public Set<Rental> getRentals() { return rentals; }
+
+  public void setRentals(Set<Rental> rentals) {
+      this.rentals = rentals;
+  }
 }

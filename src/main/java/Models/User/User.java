@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
-import Models.Kayak.Order;
+import Models.Order.Order;
+
 
 @Entity
 @Table(name = "users")
