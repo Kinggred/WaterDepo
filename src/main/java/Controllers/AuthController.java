@@ -26,7 +26,7 @@ public class AuthController {
 
   @Autowired private JwtUtil jwtUtil;
 
-  private UserService userService;
+  private final UserService userService;
   private final AuthenticationManager authenticationManager;
 
   public AuthController(AuthenticationManager authenticationManager,
@@ -59,7 +59,7 @@ public class AuthController {
       String email = authentication.getName();
       User user = userService.getUserByEmail(email);
       String token = jwtUtil.createToken(user);
-      LoginRes loginRes = new LoginRes(email, token);
+      LoginRes loginRes = new LoginRes(user.getId(), email, token);
       return ResponseEntity.ok(loginRes);
     } catch (BadCredentialsException e) {
       // TODO: This is useless now.
