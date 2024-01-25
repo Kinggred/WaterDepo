@@ -36,7 +36,6 @@ public class SheduleController {
 
     @GetMapping
     public ResponseEntity getAvailableKayaks(@RequestParam UUID modelId, @RequestParam LocalDate dateStart, @RequestParam(required = false) LocalDate dateEnd) {
-        System.out.println(modelId + " " + dateStart + " " + dateEnd); // TODO: Remove
         List<Kayak> availableKayaks = scheduleService.getKayaksAvailableInTime(dateStart, dateEnd);
         return ResponseEntity.ok(kayakMapper.toDto(availableKayaks));
     } 
