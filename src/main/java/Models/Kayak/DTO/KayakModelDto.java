@@ -15,6 +15,7 @@ public class KayakModelDto {
 
   public KayakModelDto(UUID id, Map<String, Object> info) {
       this.id = id;
+      this.info = info;
   }
 
 public Map<String, Object> getInfo() {
