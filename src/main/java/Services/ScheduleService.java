@@ -36,7 +36,7 @@ public class ScheduleService {
         List<Kayak> allKayaks = kayakRepository.findAll();
         List<UUID> unavailableKayakIds = new ArrayList<>();
         List<Kayak> availableKayaks = new ArrayList<>();
-        List<Rental> rentalsBlocked = rentalRepository.findByStartDateAfterAndEndDateBefore(startDate, endDate);
+        List<Rental> rentalsBlocked = rentalRepository.findOverlappingRentals(startDate, endDate);
         System.out.println(rentalsBlocked); // TODO: Loggers maybe
         for (Rental rental : rentalsBlocked) {
             unavailableKayakIds.add(rental.getKayak().getId());
@@ -49,10 +49,22 @@ public class ScheduleService {
         return availableKayaks;
     }
 
-    public Order placeAnOrder(MonoDatePlaceAnOrderDTO orderDTO, UUID userId) {
+    public Order placeAnOrder(MonoDatePlaceAnOrderDTO orderDTO, UUID userId) throws Exception {
         Order order = new Order();
         User user = userRepository.getReferenceById(userId);
         order.setUser(user);
+
+        List<Kayak> availableKayaks = getKayaksAvailableInTime(orderDTO.getStartDate(), orderDTO.getEndDate());
+        Set<UUID> availableKayakIds = new HashSet<>();
+        for (Kayak kayak : availableKayaks) {
+            availableKayakIds.add(kayak.getId());
+        }
+
+        boolean areKayaksAvailable = availableKayakIds.containsAll(new HashSet<>(orderDTO.getKayakIds()));
+
+        if (!areKayaksAvailable) {
+            throw new Exception();
+        }
 
         Set<Rental> rentals = new HashSet<>();
         for (UUID kayakId: orderDTO.getKayakIds()) {
