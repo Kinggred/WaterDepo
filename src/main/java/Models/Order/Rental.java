@@ -19,10 +19,10 @@ public class Rental {
   @Id @GeneratedValue(strategy = GenerationType.UUID) private UUID id;
 
 
-@ManyToOne @JoinColumn(name = "rents") private Kayak kayak;
+@ManyToOne @JoinColumn(name = "kayakId") private Kayak kayak;
 
 
-@ManyToOne @JoinColumn(name = "rentals") private Order order;
+@ManyToOne @JoinColumn(name = "orderId") private Order order;
 
 private LocalDate startDate;
 

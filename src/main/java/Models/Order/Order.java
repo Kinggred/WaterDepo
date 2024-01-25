@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Order {
   @Id @GeneratedValue(strategy = GenerationType.UUID) private UUID id;
 
-  @ManyToOne @JoinColumn(name = "orders", nullable = false) private User user;
+  @ManyToOne @JoinColumn(name = "userId", nullable = false) private User user;
 
   @OneToMany(mappedBy = "order") private Set<Rental> rentals;
 

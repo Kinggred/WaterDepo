@@ -19,7 +19,7 @@ public class Kayak {
   @Id @GeneratedValue(strategy = GenerationType.UUID) private UUID id;
   
   @ManyToOne
-  @JoinColumn(name = "model_id", nullable = false)
+  @JoinColumn(name = "typeId", nullable = false)
   private KayakModel type;
 
   @OneToMany(mappedBy = "kayak") private Set<Rental> rents;
