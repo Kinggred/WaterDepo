@@ -34,15 +34,15 @@ public class ScheduleService {
 
     public List<Kayak> getKayaksAvailableInTime(LocalDate startDate, LocalDate endDate){
         List<Kayak> allKayaks = kayakRepository.findAll();
-        List<UUID> unavailabeKayakIds = new ArrayList<>();
+        List<UUID> unavailableKayakIds = new ArrayList<>();
         List<Kayak> availableKayaks = new ArrayList<>();
         List<Rental> rentalsBlocked = rentalRepository.findByStartDateAfterAndEndDateBefore(startDate, endDate);
         System.out.println(rentalsBlocked); // TODO: Loggers maybe
         for (Rental rental : rentalsBlocked) {
-            unavailabeKayakIds.add(rental.getKayak().getId());
+            unavailableKayakIds.add(rental.getKayak().getId());
         }
         for (Kayak kayak : allKayaks) {
-            if (unavailabeKayakIds.contains(kayak.getId()) == false) {
+            if (!unavailableKayakIds.contains(kayak.getId())) {
                 availableKayaks.add(kayak);
             } 
         }
@@ -60,11 +60,13 @@ public class ScheduleService {
             rental.setKayak(kayakRepository.getReferenceById(kayakId));
             rental.setStartDate(orderDTO.getStartDate());
             rental.setEndDate(orderDTO.getEndDate());
-            rental.setOrder(order);
             rentals.add(rental);
-            rentalRepository.save(rental);
         }
+        rentalRepository.saveAll(rentals);
 
+        for (Rental rental : rentals) {
+            rental.setOrder(order);
+        }
         order.setRentals(rentals);
         return orderRepository.save(order);
     }
