@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import Models.Kayak.Kayak;
 import Models.Order.Order;
 import Models.Order.Rental;
+import Models.Order.DTO.MonoDatePlaceAnOrderDTO;
 import Models.Order.DTO.placeAnOrderDTO;
 import Models.Order.DTO.placeAnRentalDTO;
 import Models.User.User;
@@ -48,20 +49,22 @@ public class ScheduleService {
         return availableKayaks;
     }
 
-    public Order plaaceAnOrder(placeAnOrderDTO orderDTO, UUID userId) {
+    public Order placeAnOrder(MonoDatePlaceAnOrderDTO orderDTO, UUID userId) {
         Order order = new Order();
         User user = userRepository.getReferenceById(userId);
         order.setUser(user);
 
         Set<Rental> rentals = new HashSet<>();
-        for (placeAnRentalDTO rentalDTO : orderDTO.getRentalDTOs()) {
+        for (UUID kayakId: orderDTO.getKayakIds()) {
             Rental rental = new Rental();
-            rental.setKayak(kayakRepository.getReferenceById(rentalDTO.getKayakId()));
-            rental.setStartDate(rentalDTO.getStartDate());
-            rental.setEndDate(rentalDTO.getEndDate());
+            rental.setKayak(kayakRepository.getReferenceById(kayakId));
+            rental.setStartDate(orderDTO.getStartDate());
+            rental.setEndDate(orderDTO.getEndDate());
             rental.setOrder(order);
             rentals.add(rental);
+            rentalRepository.save(rental);
         }
+
         order.setRentals(rentals);
         return orderRepository.save(order);
     }

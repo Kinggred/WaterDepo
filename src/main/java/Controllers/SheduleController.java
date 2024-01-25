@@ -20,16 +20,18 @@ import Models.Kayak.Kayak;
 import Models.Kayak.DTO.KayakDto;
 import Models.Kayak.Mappers.KayakMapper;
 import Models.Order.Order;
-import Models.Order.DTO.placeAnOrderDTO;
+import Models.Order.DTO.MonoDatePlaceAnOrderDTO;
+import Models.Order.DTO.OrderDTO;
+import Models.Order.Mapper.OrderMapper;
 import Models.User.User;
-import Repositories.UserRepository;
 import Services.ScheduleService;
 import Services.UserService;
 
 @Controller
 @RequestMapping("/schedule")
 public class SheduleController {
-    @Autowired KayakMapper mapper; 
+    @Autowired KayakMapper kayakMapper; 
+    @Autowired OrderMapper orderMapper;
     @Autowired ScheduleService scheduleService; 
     @Autowired UserService userService;
 
@@ -37,15 +39,14 @@ public class SheduleController {
     public ResponseEntity<List<KayakDto>> getAvailableKayaks(@RequestParam UUID modelId, @RequestParam LocalDate dateStart, @RequestParam(required = false) LocalDate dateEnd) {
         System.out.println(modelId + " " + dateStart + " " + dateEnd); // TODO: Remove
         List<Kayak> availableKayaks = scheduleService.getKayaksAvailableInTime(dateStart, dateEnd);
-        return ResponseEntity.ok(mapper.toDto(availableKayaks));
+        return ResponseEntity.ok(kayakMapper.toDto(availableKayaks));
     } 
 
     @PostMapping("/rent")
-    public ResponseEntity placeRentOrder(@RequestBody placeAnOrderDTO order) {
+    public ResponseEntity<OrderDTO> placeRentOrder(@RequestBody MonoDatePlaceAnOrderDTO order) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication + ", " + order); // TODO: Remove
         User user = userService.getUserByEmail(authentication.getName());
-        Order orderInDb = scheduleService.plaaceAnOrder(order, user.getId());
-        return ResponseEntity.ok(orderInDb);
+        Order orderInDb = scheduleService.placeAnOrder(order, user.getId());
+        return ResponseEntity.ok(orderMapper.toDto(orderInDb));
     }
 }
