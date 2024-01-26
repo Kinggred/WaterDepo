@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 public class JwtUtil {
 
     // TODO: Not safe, gotta love GitHub mails bout leaked secrets
-    private final String secret_key = "whyIsThisSecretKeyNotWorkingThatsBeyoundMyComprehension";
-    private long accessTokenValididy = 60 * 60 * 1000;
+    // TODO: For future reference, this should be moved into properties
+    private final String secret_key = "whyIsThisSecretKeyNotWorkingThatIsBeyondMyComprehension";
 
     private final JwtParserBuilder jwtParser;
 
@@ -31,7 +31,9 @@ public class JwtUtil {
 
     public String createToken(User user) {
         Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValididy));
+        // 60 * 60 * 1000
+        long accessTokenValidity = 3600000;
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
         return Jwts.builder()
                 .claim("firstName", user.getName())
                 .subject(user.getEmail())
