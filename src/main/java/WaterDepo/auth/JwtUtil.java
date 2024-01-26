@@ -31,12 +31,7 @@ public class JwtUtil {
 
 
     public String createToken(User user) {
-        if (!isSet) {
-            // TODO: THIS SUCKS
-            this.jwtParser = Jwts.parser().setSigningKey(secret_key);
-            isSet = true;
-        }
-
+        setSecret();
         Date tokenCreateTime = new Date();
         // 60 * 60 * 1000
         long accessTokenValidity = 3600000;
@@ -50,10 +45,12 @@ public class JwtUtil {
     }
 
     private Claims parseJwtClaims(String token) {
+        setSecret();
         return jwtParser.build().parseSignedClaims(token).getBody();
     }
 
     public Claims resolveClaims(HttpServletRequest req) {
+        setSecret();
         try {
             String token = resolveToken(req);
             if (token != null) {
@@ -70,6 +67,7 @@ public class JwtUtil {
     }
 
     public String resolveToken(HttpServletRequest request) {
+        setSecret();
 
         String bearerToken = request.getHeader(TOKEN_HEADER);
         if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
@@ -92,5 +90,13 @@ public class JwtUtil {
 
     public List<String> getRoles(Claims claims) {
         return (List<String>) claims.get("roles");
+    }
+
+    public void setSecret() {
+        if (!isSet) {
+            // TODO: THIS SUCKS
+            this.jwtParser = Jwts.parser().setSigningKey(secret_key);
+            isSet = true;
+        }
     }
 }
