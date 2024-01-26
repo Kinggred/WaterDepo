@@ -23,9 +23,9 @@ public class LoggingInterceptor extends WebRequestHandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+            String userName = SecurityContextHolder.getContext().getAuthentication().getName();
             String endpoint = request.getRequestURI();
-            logger.info("User {} accessed endpoint {}", userId, endpoint);
+            logger.info("{} User {} accessed endpoint {}", response.getStatus(), userName, endpoint);
         }
     }
 }
