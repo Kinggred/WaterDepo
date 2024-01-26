@@ -6,30 +6,37 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
 
-    // TODO: Not safe, gotta love GitHub mails bout leaked secrets
-    // TODO: For future reference, this should be moved into properties
-    private final String secret_key = "whyIsThisSecretKeyNotWorkingThatIsBeyondMyComprehension";
+    @Value("${secret.key}")
+    private String secret_key;
+    private boolean isSet;
 
-    private final JwtParserBuilder jwtParser;
+    private JwtParserBuilder jwtParser;
 
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
-    public JwtUtil() {
-        this.jwtParser = Jwts.parser().setSigningKey(secret_key);
-    }
 
     public String createToken(User user) {
+        if (!isSet) {
+            // TODO: THIS SUCKS
+            this.jwtParser = Jwts.parser().setSigningKey(secret_key);
+            isSet = true;
+        }
+
         Date tokenCreateTime = new Date();
         // 60 * 60 * 1000
         long accessTokenValidity = 3600000;
