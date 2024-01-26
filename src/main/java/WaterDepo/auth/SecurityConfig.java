@@ -46,7 +46,6 @@ public class SecurityConfig {
         .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
-    System.out.println("Am i here???");
     return http.build();
   }
 
